@@ -15,13 +15,7 @@ FROM texlive/texlive@sha256:def547064eec3ba6eed2ac\
 ARG DOCKER_ENTRYPOINT
 
 # Install essential tools ----------------------------------------------------- #
-RUN apt-get update                             && \
-    apt-get install -y --no-install-recommends    \
-        sudo=1.9.13p3-1                           \
-        tmux=3.3a-3                               \
-        vim=2:9.0.1378-2                       && \
-    apt-get clean all                          && \
-    rm -rf /var/lib/apt/lists/*
+
 
 # Install Dockerfile linter --------------------------------------------------- #
 RUN curl -LO https://github.com/hadolint/\
