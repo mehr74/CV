@@ -1,10 +1,22 @@
 -include Makefile.local
 
-CV_SHORT:= mehrshad-lotfi
+OUTPUT_PREFIX   := CV_Mehrshad.Lotfi_
+CV_SHORT_EN     := short-en
+CV_SHORT_DE     := short-de
+
+CV_SHORT_EN_TEX := $(CV_SHORT_EN).tex
+CV_SHORT_DE_TEX := $(CV_SHORT_DE).tex
+CV_SHORT_EN_PDF := $(OUTPUT_PREFIX)$(CV_SHORT_EN).pdf
+CV_SHORT_DE_PDF := $(OUTPUT_PREFIX)$(CV_SHORT_DE).pdf
 
 TEX := $(shell find ./ -type f -name "*.tex")
 CLS := $(shell find ./ -type f -name "*.cls")
 BIB := $(shell find ./ -type f -name "*.bib")
+
+all:                 \
+	$(CV_SHORT_EN_PDF) \
+	$(CV_SHORT_DE_PDF)
+
 
 include .devcontainer/rules.mk
 
@@ -12,8 +24,6 @@ GNUPLOTS   := $(addsuffix .pdf,$(basename $(shell find ./figures -type f -name "
 PAPER_DEPS := $(TEX) $(CLS) $(BIB) $(FIG) $(GNUPLOTS)
 
 LATEX := python3 ./bin/latexrun --color auto --bibtex-args="-min-crossrefs=9000"
-
-all: $(CV_SHORT).pdf
 
 %.eps: %.dia
 	dia -e $@ -t eps $<
@@ -28,10 +38,15 @@ all: $(CV_SHORT).pdf
 %.pdf: %.gnuplot %.dat figures/common.gnuplot
 	(cd $(dir $@) ; gnuplot $(notdir $<)) | pdfcrop - $@
 
-build: $(CV_SHORT).pdf
+$(CV_SHORT_EN_PDF): $(PAPER_DEPS)
+	$(LATEX) $(CV_SHORT_EN_TEX) -O .latex.out -o $@
 
-$(CV_SHORT).pdf: $(PAPER_DEPS)
-	$(LATEX) main.tex -O .latex.out -o $@
+$(CV_SHORT_DE_PDF): $(PAPER_DEPS)
+	$(LATEX) $(CV_SHORT_DE_TEX) -O .latex.out -o $@
+
+
+HELP_MSG          += \tall                      Build\
+       CV pdf using latex.\n
 
 check-hadolint:
 	@hadolint .devcontainer/texlive.Dockerfile
@@ -43,6 +58,7 @@ help:
 	@printf "\n"
 	@printf "\thelp                     Show this help message\n";
 	@printf "$(HELP_MSG)"
+	@printf "\n";
 	@printf "\n";
 
 clean:
