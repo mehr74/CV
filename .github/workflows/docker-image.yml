@@ -14,7 +14,7 @@ jobs:
     - uses: actions/checkout@v3
  
     - name: Set AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: arn:aws:iam::615677714887:role/mehrshad-resume-role
         aws-region: eu-central-1
