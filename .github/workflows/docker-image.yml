@@ -32,6 +32,10 @@ jobs:
     
     - name: Run the Docker image
       run: |
+        ls ${{ github.workspace }}/src
+   
+    - name: Run the Docker image
+      run: |
         docker run --rm -v ${{ github.workspace }}/src:/usr/src \
         615677714887.dkr.ecr.eu-central-1.amazonaws.com/personal-mehrshad-resume-repo:latest \
         make
