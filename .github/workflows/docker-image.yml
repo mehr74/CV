@@ -17,7 +17,7 @@ jobs:
       run: docker build --file .devcontainer/texlive.Dockerfile --tag template-docs:$(date +%s) .
     
     - name: Run the Docker image
-      run: docker run --rm -it -v $PWD/src:/usr/src template-docs:$(date +%s) make
+      run: docker run --rm -v $PWD/src:/usr/src template-docs:$(date +%s) make
     
     - name: Set AWS credentials
       if: github.ref == 'refs/heads/main'
