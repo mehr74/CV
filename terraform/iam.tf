@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "bucket_policy" {
-  name        = "${var.bucket_name}-policy"
+  name        = "${var.name}-policy"
   description = "Policy to allow pushing files to S3"
 
   policy = jsonencode({
@@ -19,12 +19,30 @@ resource "aws_iam_policy" "bucket_policy" {
           "${aws_s3_bucket.bucket.arn}/*",
         ]
       },
+      {
+        Effect = "Allow",
+        Action = [
+          "ecr:*"
+        ],
+        Resource = [
+          aws_ecr_repository.repo.arn,
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ecr:GetAuthorizationToken"
+        ],
+        Resource = [
+          "*"
+        ]
+      }
     ]
   })
 }
 
 resource "aws_iam_role" "bucket_role" {
-  name = "${var.bucket_name}-role"
+  name = "${var.name}-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -33,12 +51,15 @@ resource "aws_iam_role" "bucket_role" {
         Action = "sts:AssumeRoleWithWebIdentity",
         Effect = "Allow",
         Principal = {
-          Federated = "var.github_oidc_provider_arn"
+          Federated = var.github_oidc_provider_arn
         },
         Condition = {
           StringEquals = {
-            "token.actions.githubusercontent.com:aud" = "${var.bucket_name}",
-            "token.actions.githubusercontent.com:sub" = ["repo:${var.github_owner}/${var.github_repo}:ref:refs/heads/main"]
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com",
+            "token.actions.githubusercontent.com:sub" = [
+              "repo:${var.github_owner}/${var.github_repo}:ref:refs/heads/main",
+              "repo:${var.github_owner}/${var.github_repo}:pull_request"
+            ]
           }
         }
       }

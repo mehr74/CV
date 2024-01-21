@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket = "mehrshad-cv"
+  bucket = "${var.name}-bucket"
 
   tags = var.tags
 }

@@ -2,7 +2,7 @@ variable "region" {
   type = string
 }
 
-variable "bucket_name" {
+variable "name" {
   type = string
 }
 
