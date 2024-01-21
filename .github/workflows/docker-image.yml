@@ -12,20 +12,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
-    - name: Build the Docker image
-      run: docker build --file .devcontainer/texlive.Dockerfile --tag template-docs:$(date +%s) .
-    
-    - name: Run the Docker image
-      run: docker run --rm -v $PWD/src:/usr/src template-docs:$(date +%s) make
-    
+ 
     - name: Set AWS credentials
-      if: github.ref == 'refs/heads/main'
       uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: arn:aws:iam::615677714887:role/mehrshad-resume-role
         aws-region: eu-central-1
     
+    - name: Run the Docker image
+      run: docker run --rm -v $PWD/src:/usr/src \
+        615677714887.dkr.ecr.eu-central-1.amazonaws.com/personal-mehrshad-resume-repo:latest \
+        make
+   
     - name: Upload to S3
       if: github.ref == 'refs/heads/main'
       run: aws s3 cp CV.Mehrshad.Lotfi.de.pdf s3://mehrshad-cv --acl public-read

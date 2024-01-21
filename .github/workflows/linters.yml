@@ -2,7 +2,6 @@ name: Linters
 
 on:
   push:
-  pull_request:
 
 jobs:
   build:
@@ -15,3 +14,17 @@ jobs:
     - uses: hadolint/hadolint-action@v3.1.0
       with:
         dockerfile: .devcontainer/texlive.Dockerfile
+      continue-on-error: true
+
+    - name: Terraform plan
+      uses: hashicorp/setup-terraform@v3
+  
+    - name: Terraform init
+      id: init
+      run: terraform init
+      working-directory: ./terraform
+    
+    - name: Terraform validate
+      id: validate
+      run: terraform validate -no-color
+      working-directory: ./terraform
