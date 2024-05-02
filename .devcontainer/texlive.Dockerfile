@@ -12,4 +12,3 @@ FROM texlive/texlive:latest-minimal
 WORKDIR /usr/src
 
 
-CMD [ "make" ]
