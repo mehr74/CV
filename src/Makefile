@@ -1,11 +1,11 @@
 -include Makefile.local
 
-OUTPUT_PREFIX   := CV_Mehrshad.Lotfi_
-CV_SHORT_EN     := short-en
-CV_SHORT_DE     := short-de
+OUTPUT_PREFIX   := CV.Mehrshad.Lotfi.
+CV_SHORT_EN     := en
+CV_SHORT_DE     := de
 
-CV_SHORT_EN_TEX := $(CV_SHORT_EN).tex
-CV_SHORT_DE_TEX := $(CV_SHORT_DE).tex
+CV_SHORT_EN_TEX := short-$(CV_SHORT_EN).tex
+CV_SHORT_DE_TEX := short-$(CV_SHORT_DE).tex
 CV_SHORT_EN_PDF := $(OUTPUT_PREFIX)$(CV_SHORT_EN).pdf
 CV_SHORT_DE_PDF := $(OUTPUT_PREFIX)$(CV_SHORT_DE).pdf
 
@@ -16,9 +16,6 @@ BIB := $(shell find ./ -type f -name "*.bib")
 all:                 \
 	$(CV_SHORT_EN_PDF) \
 	$(CV_SHORT_DE_PDF)
-
-
-include .devcontainer/rules.mk
 
 GNUPLOTS   := $(addsuffix .pdf,$(basename $(shell find ./figures -type f -name "*.gnuplot" | grep -v common)))
 PAPER_DEPS := $(TEX) $(CLS) $(BIB) $(FIG) $(GNUPLOTS)
