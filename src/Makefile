@@ -1,6 +1,6 @@
 -include Makefile.local
 
-OUTPUT_PREFIX   := CV.Mehrshad.Lotfi.
+OUTPUT_PREFIX   := CV.Arian.Delavarjou.
 CV_SHORT_EN     := en
 CV_SHORT_DE     := de
 
